@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "vn.phatbee.tuan6_sqllite"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "vn.phatbee.tuan6_sqllite"

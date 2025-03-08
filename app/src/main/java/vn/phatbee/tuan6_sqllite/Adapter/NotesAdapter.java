@@ -67,6 +67,8 @@ public class NotesAdapter extends BaseAdapter {
         // Lấy giá trị
         NotesModel notes = noteList.get(position);
         viewHolder.textViewNote.setText(notes.getNameNote());
+        viewHolder.imageViewEdit.setImageResource(R.drawable.edit);
+        viewHolder.imageViewDelete.setImageResource(R.drawable.delete);
 
         return convertView;
     }

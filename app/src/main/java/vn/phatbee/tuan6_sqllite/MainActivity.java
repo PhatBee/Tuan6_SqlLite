@@ -2,6 +2,7 @@ package vn.phatbee.tuan6_sqllite;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -10,11 +11,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+
+import vn.phatbee.tuan6_sqllite.Adapter.NotesAdapter;
 import vn.phatbee.tuan6_sqllite.Database.DatabaseHandler;
+import vn.phatbee.tuan6_sqllite.Model.NotesModel;
 
 public class MainActivity extends AppCompatActivity {
     // Khai báo biến toàn cục
     DatabaseHandler databaseHandler;
+    ListView listView;
+    ArrayList<NotesModel> arrayList;
+    NotesAdapter notesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +35,20 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Gọi hàm Database
+        anhXa();
 
+        // Gọi hàm Database
+        initDatabaseSQLite();
         // Tạo Database
+        //createDatabaseSQLite();
+        databaseSQLite();
+    }
+
+    private void anhXa(){
+        listView = findViewById(R.id.listview1);
+        arrayList = new ArrayList<>();
+        notesAdapter = new NotesAdapter(this, R.layout.row_notes, arrayList);
+        listView.setAdapter(notesAdapter);
     }
 
     private void createDatabaseSQLite() {
@@ -51,8 +70,12 @@ public class MainActivity extends AppCompatActivity {
         // Lấy dữ liệu
         Cursor cursor = databaseHandler.getData("SELECT * FROM Notes");
         while (cursor.moveToNext()){
+            // Thêm dữ liệu vào ArrayList
             String name = cursor.getString(1);
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+            int id = cursor.getInt(0);
+            arrayList.add(new NotesModel(id, name));
+            // Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
         }
+        notesAdapter.notifyDataSetChanged();
     }
 }
