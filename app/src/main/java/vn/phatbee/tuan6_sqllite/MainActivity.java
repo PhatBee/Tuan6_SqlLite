@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     EditText editName;
     Button btnThem;
     Button btnHuy;
+    Button btnEdit;
     Toolbar toolbar;
 
     @Override
@@ -63,6 +64,43 @@ public class MainActivity extends AppCompatActivity {
         // createDatabaseSQLite();
         databaseSQLite();
 
+    }
+
+    public void DialogCapNhatNotes(String name, int id){
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_edit_notes);
+
+        // Ánh xạ trong Dialog
+        editName = dialog.findViewById(R.id.editName);
+        btnEdit = dialog.findViewById(R.id.btnEdit);
+        btnHuy = dialog.findViewById(R.id.btnHuy);
+        editName.setText(name);
+
+        // Bắt sự kiện cho nút cập nhật
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = editName.getText().toString().trim();
+                if (name.equals("")){
+                    Toast.makeText(MainActivity.this, "Vui lòng nhập tên Notes", Toast.LENGTH_SHORT).show();
+                } else{
+                    databaseHandler.queryData("UPDATE Notes SET NameNotes = '"+ name +"' WHERE Id = '"+ id +"'");
+                    Toast.makeText(MainActivity.this, "Đã cập nhật Notes", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    databaseSQLite(); // Load lại dữ liệu
+                }
+            }
+        });
+
+        btnHuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void DialogThem(){

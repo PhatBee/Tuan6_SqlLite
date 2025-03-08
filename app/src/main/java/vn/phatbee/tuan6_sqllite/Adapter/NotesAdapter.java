@@ -7,14 +7,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import vn.phatbee.tuan6_sqllite.MainActivity;
 import vn.phatbee.tuan6_sqllite.Model.NotesModel;
 import vn.phatbee.tuan6_sqllite.R;
 
 public class NotesAdapter extends BaseAdapter {
-    private Context context;
+    private MainActivity context;
     private int layout;
     private List<NotesModel> noteList;
 
@@ -27,7 +29,7 @@ public class NotesAdapter extends BaseAdapter {
     }
 
     // Tạo Constructor
-    public NotesAdapter(Context context, int layout, List<NotesModel> noteList) {
+    public NotesAdapter(MainActivity context, int layout, List<NotesModel> noteList) {
         this.context = context;
         this.layout = layout;
         this.noteList = noteList;
@@ -67,6 +69,16 @@ public class NotesAdapter extends BaseAdapter {
         // Lấy giá trị
         NotesModel notes = noteList.get(position);
         viewHolder.textViewNote.setText(notes.getNameNote());
+
+        // Bắt sự kiện nút cập nhật
+        viewHolder.imageViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Cập nhật " + notes.getNameNote(), Toast.LENGTH_SHORT).show();
+                // Gọi Dialog trong MainActivity
+                context.DialogCapNhatNotes(notes.getNameNote(), notes.getIdNote());
+            }
+        });
         viewHolder.imageViewEdit.setImageResource(R.drawable.edit);
         viewHolder.imageViewDelete.setImageResource(R.drawable.delete);
 
