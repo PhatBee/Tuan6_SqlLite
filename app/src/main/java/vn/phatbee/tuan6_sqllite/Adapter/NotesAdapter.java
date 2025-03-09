@@ -79,6 +79,16 @@ public class NotesAdapter extends BaseAdapter {
                 context.DialogCapNhatNotes(notes.getNameNote(), notes.getIdNote());
             }
         });
+
+        // Bắt sự kiện nút xoá
+        viewHolder.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Xoá " + notes.getNameNote(), Toast.LENGTH_SHORT).show();
+                // Gọi Dialog trong MainActivity
+                context.DialogDelete(notes.getNameNote(), notes.getIdNote());
+            }
+        });
         viewHolder.imageViewEdit.setImageResource(R.drawable.edit);
         viewHolder.imageViewDelete.setImageResource(R.drawable.delete);
 

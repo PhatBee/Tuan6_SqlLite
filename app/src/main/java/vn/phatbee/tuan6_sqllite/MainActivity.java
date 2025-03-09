@@ -1,6 +1,8 @@
 package vn.phatbee.tuan6_sqllite;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -66,6 +68,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void DialogDelete(String name, final int id){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Bạn có muốn xoá Notes " + name + " này không?");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                databaseHandler.queryData("DELETE FROM Notes WHERE Id = '"+ id +"'");
+                Toast.makeText(MainActivity.this, "Xoá Notes " + name + " thành công", Toast.LENGTH_SHORT).show();
+                databaseSQLite(); // Load lại dữ liệu
+            }
+        });
+
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
+    }
+
     public void DialogCapNhatNotes(String name, int id){
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -125,6 +148,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Đã thêm Notes", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                     databaseSQLite(); // Load lại dữ liệu
+
+                    // Cuộn xuống item mới
+                    listView.smoothScrollToPosition(arrayList.size() - 1);
+                    listView.setSelection(arrayList.size() - 1);
                 }
             }
         });
@@ -175,6 +202,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void databaseSQLite(){
+        // Xóa dữ liệu cũ trong arrayList
+        arrayList.clear();
+
         // Lấy dữ liệu
         Cursor cursor = databaseHandler.getData("SELECT * FROM Notes");
         while (cursor.moveToNext()){
